@@ -46,6 +46,7 @@ class Yotpo {
 
     protected function post($uri, array $params = null) {
         $params = self::clean_array($params);
+        $params = json_encode($params);
         return self::process_response(Request::post(self::$base_uri . $uri)->body($params)->send());
     }
 
@@ -165,9 +166,9 @@ class Yotpo {
     }
 
     public function create_purchases(array $purchases_hash) {
-        $request = self::build_request(array('utoken' => 'utoken', 'platform' => 'platform', 'orders' => 'orders'), $purchases_hash);
+        $request = self::build_request(array('utoken' => 'utoken', 'platform' => 'platform', 'orders' => 'orders', 'validate_data' => 'validate_data'), $purchases_hash);
         $app_key = $this->get_app_key($purchases_hash);
-        return $this->post("/apps/$app_key/purchases/mass_create", $request);
+        return $this->post("/apps/$app_key/purchases/mass_create.json", $request);
     }
 
     public function get_purchases(array $request_hash) {
